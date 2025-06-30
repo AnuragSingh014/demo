@@ -63,30 +63,33 @@ export function PointerHighlight({
               width: 0,
               height: 0,
             }}
-            whileInView={{
-              width: dimensions.width,
-              height: dimensions.height,
+            animate={{
+              width: [0, dimensions.width, dimensions.width, 0],
+              height: [0, dimensions.height, dimensions.height, 0],
             }}
             transition={{
-              duration: 1,
+              duration: 3,
               ease: "easeInOut",
+              repeat: Infinity,
+              repeatDelay: 0.5,
             }}
           />
           <motion.div
             className="pointer-events-none absolute"
-            initial={{ opacity: 0 }}
-            whileInView={{
-              opacity: 1,
-              x: dimensions.width + 4,
-              y: dimensions.height + 4,
+            initial={{ opacity: 0, x: 0, y: 0 }}
+            animate={{
+              opacity: [0, 1, 1, 0],
+              x: [0, dimensions.width + 4, dimensions.width + 4, 0],
+              y: [0, dimensions.height + 4, dimensions.height + 4, 0],
             }}
             style={{
               rotate: -90,
             }}
             transition={{
-              opacity: { duration: 0.1, ease: "easeInOut" },
-              duration: 1,
+              duration: 3,
               ease: "easeInOut",
+              repeat: Infinity,
+              repeatDelay: 0.5,
             }}
           >
             <Pointer

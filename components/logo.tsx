@@ -1,5 +1,6 @@
 import { cn } from '../lib/utils'
 import Image from 'next/image'
+import { PointerHighlight } from './ui/pointer-highlight'
 
 export const Logo = ({ className }: { className?: string }) => {
   return (
@@ -12,7 +13,11 @@ export const Logo = ({ className }: { className?: string }) => {
           className="object-contain"
         />
       </div>
-      <span className="font-bold text-lg">LeadSeeder</span>
+      <PointerHighlight
+                      rectangleClassName="bg-neutral-200 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded-md text-center"
+                      pointerClassName="text-yellow-500">
+      <span className="font-bold text-lg px-2 py-2 text-center relative z-10">LeadSeeder</span>
+      </PointerHighlight>
     </div>
   )
 }

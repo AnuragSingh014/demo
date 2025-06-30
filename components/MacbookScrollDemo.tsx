@@ -3,18 +3,14 @@ import { MacbookScroll } from "@/components/ui/macbook-scroll";
 
 export function MacbookScrollDemo() {
   return (
-    <div className="overflow-hidden dark:bg-[#0B0B0F] bg-white w-full">
+    <div className="overflow-hidden dark:bg-[oklch(0.147_0.004_49.25)] bg-white w-full">
       <MacbookScroll
         title={
           <span>
             This Macbook is built with Tailwindcss. <br /> No kidding.
           </span>
         }
-        badge={
-          <a href="https://peerlist.io/manuarora">
-            <Badge className="h-10 w-10 transform -rotate-12" />
-          </a>
-        }
+        
         src={`/linear.webp`}
         showGradient={false}
       />

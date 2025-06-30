@@ -4,10 +4,10 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { TextEffect } from '@/components/ui/text-effect'
 import { AnimatedGroup } from '@/components/ui/animated-group'
-// import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { HoverBorderGradient } from './ui/hover-border-gradient';
 import ColourfulText from "@/components/ui/colourful-text";
 import { motion } from 'framer-motion';
+import { FlipWords } from "./ui/flip-words";
 const transitionVariants = {
     item: {
         hidden: {
@@ -29,70 +29,21 @@ const transitionVariants = {
 }
 
 export default function HeroSection() {
-    // const images = [
-    //     "https://assets.aceternity.com/cloudinary_bkp/3d-card.png",
-    //     "https://assets.aceternity.com/animated-modal.png",
-    //     "https://assets.aceternity.com/animated-testimonials.webp",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Tooltip_luwy44.png",
-    //     "https://assets.aceternity.com/github-globe.png",
-    //     "https://assets.aceternity.com/glare-card.png",
-    //     "https://assets.aceternity.com/layout-grid.png",
-    //     "https://assets.aceternity.com/flip-text.png",
-    //     "https://assets.aceternity.com/hero-highlight.png",
-    //     "https://assets.aceternity.com/carousel.webp",
-    //     "https://assets.aceternity.com/placeholders-and-vanish-input.png",
-    //     "https://assets.aceternity.com/shooting-stars-and-stars-background.png",
-    //     "https://assets.aceternity.com/signup-form.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/stars_sxle3d.png",
-    //     "https://assets.aceternity.com/spotlight-new.webp",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Spotlight_ar5jpr.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Parallax_Scroll_pzlatw_anfkh7.png",
-    //     "https://assets.aceternity.com/tabs.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Tracing_Beam_npujte.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/typewriter-effect.png",
-    //     "https://assets.aceternity.com/glowing-effect.webp",
-    //     "https://assets.aceternity.com/hover-border-gradient.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Infinite_Moving_Cards_evhzur.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Lamp_hlq3ln.png",
-    //     "https://assets.aceternity.com/macbook-scroll.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Meteors_fye3ys.png",
-    //     "https://assets.aceternity.com/cloudinary_bkp/Moving_Border_yn78lv.png",
-    //     "https://assets.aceternity.com/multi-step-loader.png",
-    //     "https://assets.aceternity.com/vortex.png",
-    //     "https://assets.aceternity.com/wobble-card.png",
-    //     "https://assets.aceternity.com/world-map.webp",
-    // ];
+    const words = ["Automation", "preservation", "Automation", "Automation"];
 
     return (
-        <main className=" bg-white dark:bg-[oklch(0.147_0.004_49.25)] text-black dark:text-neutral-200 rounded-md mx-3 flex h-screen items-center justify-center overflow-hidden">
-            <section className="h-full w-full">
+        <main className=" bg-white dark:bg-[oklch(0.147_0.004_49.25)] text-black dark:text-neutral-200 rounded-md mx-3 flex pt-6 pb-4 items-center justify-center overflow-hidden">
+            <section className=" w-full">
                 <div className="relative mx-auto flex h-full w-full max-w-7xl flex-col items-center justify-center overflow-hidden rounded-3xl">
-                    {/* Content */}
+                    
                     <div className="relative z-20 text-center">
-                        {/* <TextEffect
-                            preset="fade-in-blur"
-                            speedSegment={0.3}
-                            as="h1"
-                            className="mx-auto max-w-4xl text-balance text-6xl font-bold text-white md:text-7xl lg:text-6xl xl:text-[5.25rem]">
-                            Modern Automation Solutions for Lead Generation
-                        </TextEffect>
                         
-                        
-                        <TextEffect
-                            per="line"
-                            preset="fade-in-blur"
-                            speedSegment={0.3}
-                            delay={0.5}
-                            as="p"
-                            className="relative z-20 mx-auto max-w-2xl py-8 text-center text-lg text-neutral-200 md:text-base">
-                            Automate LinkedIn connection requests, Send automated follow-up messages, and visit the profiles of your prospects. 10x your LinkedIn outreach and book meetings with Leadseeder
-                        </TextEffect> */}
                         <motion.h1
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8 }}
     className="mx-auto max-w-4xl text-balance text-6xl font-bold text-black dark:text-neutral-200 md:text-7xl lg:text-6xl xl:text-[5.25rem]">
-    Modern <ColourfulText text="Automation" /> Solutions for Lead Generation
+    Modern <br/> <FlipWords words={words} /> <br/> Solutions for Lead Generation
     </motion.h1>
   
   <TextEffect
@@ -123,7 +74,7 @@ export default function HeroSection() {
                                 <Button
                                     asChild
                                     size="lg"
-                                    className="rounded-xl bg-sky-600 px-6 py-2.5 text-base font-medium text-white transition-colors hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:ring-offset-black">
+                                    className="rounded-xl bg-[#7abf9b] px-6 py-2.5 text-base font-medium text-white transition-colors hover:bg-[#3c8388] border-[#54a295] focus:ring-offset-2 focus:ring-offset-black dark:bg-black dark:text-white">
                                     <Link href="#link">
                                         <span className="text-nowrap">Get started</span>
                                     </Link>
@@ -134,7 +85,7 @@ export default function HeroSection() {
   as={Link}
   href={"#"}
   containerClassName="rounded-xl"
-  className="h-10.5 px-6 py-2.5 text-white bg-white/10 border-white/20 backdrop-blur-sm transition-colors hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black"
+  className="h-10.5 px-6 py-2.5 text-black bg-white border-white backdrop-blur-sm transition-colors hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2 focus:ring-offset-black"
   duration={1}
   clockwise={true}
 >

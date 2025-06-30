@@ -55,19 +55,54 @@ export default function PricingComparator() {
   return (
     <section className="relative min-h-screen flex flex-col justify-center bg-slate-50 dark:bg-[oklch(0.147_0.004_49.25)] text-neutral-800 dark:text-neutral-200 overflow-hidden">
       <div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
+        
+        {/* Hero Section */}
+        <div className="text-center mb-16 lg:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 text-sm font-medium mb-6">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+            Simple, transparent pricing
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6">
+            Choose the perfect plan
+            <span className="block text-emerald-500">for your needs</span>
+          </h1>
+          
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto mb-8">
+            Start free and scale as you grow. No hidden fees, no surprises. 
+            Cancel anytime with our 30-day money-back guarantee.
+          </p>
+          
+          {/* Trust indicators */}
+          <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-2">
+              <CheckSVG className="w-4 h-4 fill-emerald-500" />
+              <span>30-day free trial</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckSVG className="w-4 h-4 fill-emerald-500" />
+              <span>No setup fees</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckSVG className="w-4 h-4 fill-emerald-500" />
+              <span>Cancel anytime</span>
+            </div>
+          </div>
+        </div>
+
         {/* Pricing toggle */}
         <div className="flex justify-center max-w-[14rem] m-auto mb-8 lg:mb-16">
           <div className="relative flex w-full p-1 bg-white dark:bg-slate-900 rounded-full">
             <span className="absolute inset-0 m-1 pointer-events-none" aria-hidden="true">
               <span
-                className={`absolute inset-0 w-1/2 bg-indigo-500 rounded-full shadow-sm shadow-indigo-950/10 transform transition-transform duration-150 ease-in-out ${
+                className={`absolute inset-0 w-1/2 bg-[#54a295] rounded-full shadow-sm transform transition-transform duration-150 ease-in-out ${
                   isAnnual ? "translate-x-0" : "translate-x-full"
                 }`}
               ></span>
             </span>
             <button
               className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
-                isAnnual ? "text-white" : "text-slate-500 dark:text-slate-400"
+                isAnnual ? "text-white" : "text-black dark:text-slate-400"
               }`}
               aria-pressed={isAnnual}
               onClick={() => setIsAnnual(true)}
@@ -113,7 +148,7 @@ export default function PricingComparator() {
                   </div>
                   <div className="text-sm text-slate-500 mb-5">{plan.description}</div>
                   <a
-                    className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150"
+                    className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-emerald-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-emerald-600 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150"
                     href="#0"
                   >
                     Purchase Plan
@@ -132,9 +167,20 @@ export default function PricingComparator() {
             </div>
           ))}
         </div>
-      </div>
-      {/* Footer as per your color scheme */}
 
+        {/* FAQ or Additional Info Section */}
+        <div className="mt-16 lg:mt-20 text-center">
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+            Still have questions?
+          </h3>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
+            Can't find the answer you're looking for? Please chat with our friendly team.
+          </p>
+          <button className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors">
+            Get in touch
+          </button>
+        </div>
+      </div>
     </section>
   );
 }

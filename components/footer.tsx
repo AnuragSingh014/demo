@@ -72,7 +72,7 @@ const dockLinks = [
 export default function FooterSection() {
   return (
     // <footer className="relative h-[55vh] bg-black dark:bg-[oklch(0.147_0.004_49.25)] text-neutral-800 dark:text-neutral-200 pt-10  overflow-hidden">
-    <footer className="relative h-[55vh] bg-white dark:bg-[oklch(0.147_0.004_49.25)] text-neutral-800 dark:text-neutral-200 pt-10  overflow-hidden">
+    <footer className="relative bg-white dark:bg-[oklch(0.147_0.004_49.25)] text-neutral-800 dark:text-neutral-200 pt-10  overflow-hidden">
       {/* Background beams behind everything */}
       <BackgroundBeamsWithCollision className="absolute inset-0 z-0 pointer-events-none" /> 
 
