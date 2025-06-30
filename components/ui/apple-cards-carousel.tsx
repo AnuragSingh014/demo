@@ -5,8 +5,7 @@ import React, {
   useState,
   createContext,
   useContext,
-  RefObject,
-  MutableRefObject,
+  useCallback,
 } from "react";
 import {
   IconArrowNarrowLeft,
@@ -14,111 +13,142 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image, { ImageProps } from "next/image";
-import { useOutsideClick } from "@/hooks/use-outside-click";
 
-
-import {
-  
-  useCallback,
-
-} from "react";
-
-
-// Dummy icons and BlurImage for demonstration
-
-// const BlurImage = (props: any) => (
-//   <img {...props} style={{ borderRadius: 24, ...props.style }} />
-// );
-
-// Carousel Context
 const CarouselContext = createContext<any>({});
-
-interface CarouselProps {
-  items: React.ReactElement[];
-  initialScroll?: number;
-}
-
-type Card = {
-  src: string;
-  title: string;
-  category: string;
-  content: React.ReactNode;
-};
-
-// export const CarouselContext = createContext<{
-//   onCardClose: (index: number) => void;
-//   currentIndex: number;
-// }>({
-//   onCardClose: () => {},
-//   currentIndex: 0,
-// });
 
 export const Carousel = ({ items }: { items: React.ReactNode[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const animationRef = useRef<number | null>(null);
+  const lastScrollTime = useRef<number>(0);
+  const scrollSpeedRef = useRef<number>(1.5);
 
-  // Card width and gap
-  const isMobile = () =>
-    typeof window !== "undefined" && window.innerWidth < 768;
-  const cardWidth = isMobile() ? 230 : 384;
-  const gap = isMobile() ? 4 : 8;
+  // Responsive card dimensions
+  const getCardDimensions = () => {
+    const isMobile = window.innerWidth < 768;
+    return {
+      width: isMobile ? 230 : 384,
+      gap: isMobile ? 16 : 32,
+    };
+  };
 
-  // Clone items before and after
+  const [dimensions, setDimensions] = useState(getCardDimensions());
+  
+  // Handle resize
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions(getCardDimensions());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Clone items for infinite effect
   const originalLength = items.length;
   const clonedItems = [...items, ...items, ...items];
 
-  // Set initial scroll position to the first "real" set
+  // Set initial scroll position
   useEffect(() => {
     if (carouselRef.current) {
-      carouselRef.current.scrollLeft = (cardWidth + gap) * originalLength;
+      const { width, gap } = dimensions;
+      carouselRef.current.scrollLeft = (width + gap) * originalLength;
     }
-  }, [cardWidth, gap, originalLength]);
+  }, [dimensions, originalLength]);
 
   // Infinite scroll logic
-  const handleInfiniteScroll = useCallback(() => {
+
+  // Smooth auto-scroll with requestAnimationFrame
+  const autoScroll = useCallback(() => {
     if (!carouselRef.current) return;
-    const { scrollLeft } = carouselRef.current;
-    const singleSetWidth = (cardWidth + gap) * originalLength;
-
-    if (scrollLeft >= singleSetWidth * 2) {
-      // At end, jump back to middle set
-      carouselRef.current.scrollLeft = scrollLeft - singleSetWidth;
-    } else if (scrollLeft < singleSetWidth) {
-      // At start, jump forward to middle set
-      carouselRef.current.scrollLeft = scrollLeft + singleSetWidth;
+    
+    const now = Date.now();
+    if (now - lastScrollTime.current < 16) {
+      animationRef.current = requestAnimationFrame(autoScroll);
+      return;
     }
-    setCurrentIndex(
-      Math.round(
-        (carouselRef.current.scrollLeft - singleSetWidth) / (cardWidth + gap)
-      ) % originalLength
-    );
-  }, [cardWidth, gap, originalLength]);
+    
+    lastScrollTime.current = now;
+    carouselRef.current.scrollBy({ 
+      left: scrollSpeedRef.current, 
+      behavior: "smooth" 
+    });
+    
+    animationRef.current = requestAnimationFrame(autoScroll);
+  }, []);
 
-  // Auto-scroll effect
+  // Start/stop auto-scroll on hover
   useEffect(() => {
-    const scrollAmount = 1.5;
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-        handleInfiniteScroll();
-      }
-    }, 20);
-    return () => clearInterval(interval);
-  }, [handleInfiniteScroll]);
+    const carousel = carouselRef.current;
+    if (!carousel) return;
 
+    const handleMouseEnter = () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (!animationRef.current) {
+        animationRef.current = requestAnimationFrame(autoScroll);
+      }
+    };
+
+    carousel.addEventListener('mouseenter', handleMouseEnter);
+    carousel.addEventListener('mouseleave', handleMouseLeave);
+    
+    // Start auto-scroll
+    animationRef.current = requestAnimationFrame(autoScroll);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      carousel.removeEventListener('mouseenter', handleMouseEnter);
+      carousel.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [autoScroll]);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleInfiniteScroll = useCallback(() => {
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+  
+    scrollTimeout.current = setTimeout(() => {
+      if (!carouselRef.current) return;
+      const { scrollLeft } = carouselRef.current;
+      const { width, gap } = dimensions;
+      const singleSetWidth = (width + gap) * originalLength;
+  
+      if (scrollLeft >= singleSetWidth * 2) {
+        carouselRef.current.scrollLeft = scrollLeft - singleSetWidth;
+      } else if (scrollLeft < singleSetWidth) {
+        carouselRef.current.scrollLeft = scrollLeft + singleSetWidth;
+      }
+  
+      const newIndex = Math.round(
+        (carouselRef.current.scrollLeft - singleSetWidth) / (width + gap)
+      ) % originalLength;
+      setCurrentIndex((newIndex + originalLength) % originalLength);
+    }, 100);
+  }, [dimensions, originalLength]);
+  
+  useEffect(() => {
+    return () => {
+      if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    };
+  }, []);
+  
   return (
     <div className="relative w-full">
       <div
-        className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
+        className="flex w-full overflow-x-scroll overscroll-x-contain scroll-smooth py-10 [scrollbar-width:none] md:py-20"
         ref={carouselRef}
         onScroll={handleInfiniteScroll}
-        style={{ scrollBehavior: "smooth" }}
       >
-        <div
-          className="flex flex-row justify-start gap-4 pl-4 mx-auto max-w-7xl"
-        >
+        <div className="flex flex-row justify-start gap-4 pl-4 mx-auto max-w-7xl">
           {clonedItems.map((item, idx) => (
             <div key={idx} className="rounded-3xl">
               {item}
@@ -129,6 +159,9 @@ export const Carousel = ({ items }: { items: React.ReactNode[] }) => {
     </div>
   );
 };
+
+// ... rest of your components (Card, BlurImage) remain the same ...
+
 
 
 // --- Card Component ---
@@ -284,3 +317,4 @@ export const BlurImage = ({
     />
   );
 };
+
