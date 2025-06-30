@@ -31,14 +31,29 @@ export const Carousel = ({ items }: { items: React.ReactNode[] }) => {
   const lastScrollTime = useRef<number>(0);
   const scrollSpeedRef = useRef<number>(1.5);
 
-  // Responsive card dimensions
-  const getCardDimensions = () => {
+   // Responsive card dimensions (SAFE)
+   const getCardDimensions = () => {
+    if (typeof window === "undefined") {
+      return { width: 384, gap: 32 };
+    }
     const isMobile = window.innerWidth < 768;
     return {
       width: isMobile ? 230 : 384,
       gap: isMobile ? 16 : 32,
     };
   };
+
+  // Initialize and update dimensions
+  useEffect(() => {
+    setDimensions(getCardDimensions());
+    
+    const handleResize = () => {
+      setDimensions(getCardDimensions());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [dimensions, setDimensions] = useState(getCardDimensions());
   
