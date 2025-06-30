@@ -17,6 +17,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image, { ImageProps } from "next/image";
 
 const CarouselContext = createContext<any>({});
+type CardItem = {
+  src: string;
+  title: string;
+  category: string;
+  content: React.ReactNode;
+};
 
 export const Carousel = ({ items }: { items: React.ReactNode[] }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -170,7 +176,7 @@ export const Card = ({
   index,
   layout = false,
 }: {
-  card: Card;
+  card: CardItem;
   index: number;
   layout?: boolean;
 }) => {
