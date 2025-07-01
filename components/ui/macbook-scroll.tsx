@@ -24,7 +24,6 @@ import { IconCommand } from "@tabler/icons-react";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { IconCaretDownFilled } from "@tabler/icons-react";
 
-
 export const MacbookScroll = ({
   src,
   showGradient,
@@ -68,14 +67,14 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="flex min-h-[200vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-30 [perspective:800px] sm:scale-50 md:scale-100 md:py-30"
+      className="flex min-h-[100vh] md:min-h-[200vh] shrink-0 scale-[0.35] transform flex-col items-center justify-center py-2 sm:py-3 md:py-20 [perspective:800px] sm:scale-50 md:scale-100"
     >
       <motion.h2
         style={{
           translateY: textTransform,
           opacity: textOpacity,
         }}
-        className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+        className="mb-8 sm:mb-12 md:mb-20 text-center text-lg sm:text-xl md:text-3xl font-bold text-neutral-800 dark:text-white"
       >
         {title || (
           <span>
@@ -83,7 +82,8 @@ export const MacbookScroll = ({
           </span>
         )}
       </motion.h2>
-      {/* Lid */}
+      
+      {/* Lid with proper image fitting */}
       <Lid
         src={src}
         scaleX={scaleX}
@@ -91,6 +91,7 @@ export const MacbookScroll = ({
         rotate={rotate}
         translate={translate}
       />
+      
       {/* Base area */}
       <div className="relative -z-10 h-[22rem] w-[32rem] overflow-visible rounded-2xl bg-gray-200 dark:bg-[#272729]">
         {/* above keyboard bar */}
@@ -113,19 +114,19 @@ export const MacbookScroll = ({
         {showGradient && (
           <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
         )}
-        {/* {badge && <div className="absolute bottom-4 left-4">{badge}</div>} */}
         
         {badge && (
-  <div className="absolute -bottom-10 left-6 z-50 scale-100 sm:-bottom-14 sm:left-12">
-    {badge}
-  </div>)}
-
+          <div className="absolute -bottom-6 left-4 z-50 scale-75 sm:-bottom-8 sm:left-6 sm:scale-90 md:-bottom-12 md:left-8 md:scale-100">
+            {badge}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export const Lid = ({
+// Updated Lid component with proper image fitting
+const Lid = ({
   scaleX,
   scaleY,
   rotate,
@@ -150,12 +151,12 @@ export const Lid = ({
       >
         <div
           style={{
-            boxShadow: "0px 2px 0px 2px #171717 inset",
+            boxShadow: "0px 2px 0px 2px var(--neutral-900) inset",
           }}
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
           <span className="text-white">
-            
+            {/* Your logo here */}
           </span>
         </div>
       </div>
@@ -171,15 +172,19 @@ export const Lid = ({
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
-        {/* <img
-          src={src as string}
-          alt="aceternity logo"
-          className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
-        /> */}
+        {src && (
+          <img
+            src={src}
+            alt="MacBook Screen"
+            className="absolute inset-0 h-full w-full rounded-lg object-cover object-center"
+          />
+        )}
       </motion.div>
     </div>
   );
 };
+
+
 
 
 // export function Lid() {

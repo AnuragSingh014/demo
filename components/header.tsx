@@ -20,6 +20,9 @@ export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
     const [isScrolled, setIsScrolled] = React.useState(false)
     const pathname = usePathname()
+    
+    // Properly typed ref
+    const navRef = React.useRef<HTMLElement>(null)
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -29,6 +32,30 @@ export const HeroHeader = () => {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
+    // Properly typed click outside detection
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+            if (navRef.current && !navRef.current.contains(event.target as Node) && menuState) {
+                setMenuState(false)
+            }
+        }
+
+        if (menuState) {
+            document.addEventListener('mousedown', handleClickOutside)
+            document.addEventListener('touchstart', handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener('touchstart', handleClickOutside)
+        }
+    }, [menuState])
+
+    // Close menu when clicking on menu items (mobile)
+    const handleMenuItemClick = () => {
+        setMenuState(false)
+    }
+
     const isActive = (href: string) => {
         return pathname === href
     }
@@ -36,23 +63,19 @@ export const HeroHeader = () => {
     return (
         <header>
             <nav
+                ref={navRef} // Add ref to the nav element
                 data-state={menuState && 'active'}
                 className="fixed z-20 w-full px-2">
                 <div className={cn('mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12', isScrolled && 'bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5')}>
                     <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
                         <div className="flex w-full justify-between lg:w-auto">
-                            
-                            
                             <Link
                                 href="/"
                                 aria-label="home"
                                 className="flex items-center space-x-2">
-                                    
-                                    <span>
-
-                                <Logo />
-                                    </span>
-                            
+                                <span>
+                                    <Logo />
+                                </span>
                             </Link>
 
                             <button
@@ -76,7 +99,6 @@ export const HeroHeader = () => {
                                             )}>
                                             <span className="relative inline-block">
                                                 {item.name}
-                                                {/* Hover underline animation - only on hover */}
                                                 {!isActive(item.href) && (
                                                     <span className="absolute left-0 bottom-0 h-0.5 bg-current w-0 transition-all duration-300 group-hover:w-full"></span>
                                                 )}
@@ -94,13 +116,13 @@ export const HeroHeader = () => {
                                         <li key={item.name}>
                                             <Link
                                                 href={item.href}
+                                                onClick={handleMenuItemClick} // Close menu on click
                                                 className={cn(
                                                     "text-muted-foreground hover:text-accent-foreground block duration-150 relative group",
                                                     isActive(item.href) && "text-accent-foreground font-medium"
                                                 )}>
                                                 <span className="relative inline-block">
                                                     {item.name}
-                                                    {/* Hover underline animation - only on hover */}
                                                     {!isActive(item.href) && (
                                                         <span className="absolute left-0 bottom-0 h-0.5 bg-current w-0 transition-all duration-300 group-hover:w-full"></span>
                                                     )}
@@ -116,7 +138,7 @@ export const HeroHeader = () => {
                                     variant="outline"
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}>
-                                    <Link href="#">
+                                    <Link href="#" onClick={handleMenuItemClick}>
                                         <span>Chrome Extension</span>
                                     </Link>
                                 </Button>
@@ -125,7 +147,7 @@ export const HeroHeader = () => {
                                     asChild
                                     size="sm"
                                     className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
-                                    <Link href="#">
+                                    <Link href="#" onClick={handleMenuItemClick}>
                                         <span>Get Started</span>
                                     </Link>
                                 </Button>
