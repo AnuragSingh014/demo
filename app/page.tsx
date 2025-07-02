@@ -21,7 +21,9 @@ import { HoverBorderGradientDemo } from "@/components/HoverBorderGradientDemo";
 import IntegrationsSection from "@/components/integrations-7";
 
 
+
 import LogoCloud from "@/components/logo-cloud";
+import Logo from "@/components/logos/Logo";
 import { MacbookScrollDemo } from "@/components/MacbookScrollDemo";
 import { PlaceholdersAndVanishInputDemo } from "@/components/PlaceholdersAndVanishInputDemo";
 import { PointerHighlightDemo } from "@/components/PointerHighlightDemo";
@@ -55,6 +57,7 @@ export default function Home() {
       {/* <BackgroundLinesDemo/> */}
       {/* <AnimatedTestimonials/> */}
       <Auroraa/>
+      <Logo />
       {/* <ThreeDCard/> */}
       {/* <ThreeDM/>   */}
       {/* <PinContainer>
